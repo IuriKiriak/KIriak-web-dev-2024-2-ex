@@ -1,0 +1,45 @@
+{% macro login_form(user, errors) %}
+
+<div class="modal {% if session['login_error'] == False %}fade{% endif %}" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Аутентификация пользователей</h5>
+                <a class="btn-close" aria-current="page" href="{{url_for('index')}}"></a>
+
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label for="InputLogin" class="form-label">Логин</label >
+                        <input type="text" name="login" class="form-control" id="InputLogin" value={{ request.form.login or ''}}>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputPassword" class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" id="InputPassword" value={{ request.form.password or ''}}>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" name="remember" id="rememberMeCheck" {% if request.form.get('remember') %}checked{% endif %}>
+                        <label class="form-check-label" for="rememberMeCheck" >Запомнить меня</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+            </div>
+        </div>
+        <div id="alert-container-login" class="alert-container-login">
+            {% with msg = get_flashed_messages(with_categories=true) %}
+                {% for category, message in msg %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="toast-duration"></div>
+                    </div>
+                {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+{% endmacro %}

@@ -30,3 +30,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {
+//    keyboard: false
+//})
+//myModal.show()
+
+//{% if session['login_error'] == True %}
+//    <script>
+//        var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {
+//            keyboard: false
+//        })
+//        myModal.show()
+//    </script>
+//{% endif %}

@@ -9,6 +9,10 @@ main {
     left: 50%;
 }
 
+.alert-container-login {
+    margin-top: 10px;
+}
+
 .toast-duration {
     position: relative;
     display: block;

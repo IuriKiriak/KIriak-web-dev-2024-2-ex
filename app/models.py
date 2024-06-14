@@ -11,8 +11,8 @@ class User(UserMixin):
         self.password = password
 
     @staticmethod
-    def get(user_id):
-        user = User.users.get(user_id)
+    def get(name):
+        user = User.users.get(name)
         if user:
             return User(user_id=user['id'], name=user['name'], password=user['password'])
         return None
