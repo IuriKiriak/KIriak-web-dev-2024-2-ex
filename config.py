@@ -1,8 +1,10 @@
-SECRET_KEY='b3baa1cb519a5651c472d1afa1b3f4e04f1adf6909dae88a4cd39adc0ddd9732'
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-MYSQL_USER='std_2421_lab5'
-MYSQL_PASSWORD='Lab5parol'
+SECRET_KEY = os.getenv('SECRET_KEY')
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_HOST = os.getenv('MYSQL_HOST')
+MYSQL_DATABASE = os.getenv('MYSQL_DATABASE')
 
-MYSQL_HOST='std-mysql.ist.mospolytech.ru'
-
-MYSQL_DATABASE='std_2421_lab5'

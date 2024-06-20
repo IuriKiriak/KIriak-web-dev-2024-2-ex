@@ -1,18 +1,33 @@
 from flask_login import UserMixin
+import mysql.connector
+from flask import g
+
 
 class User(UserMixin):
-    users = {
-        '1': {'id': '1', 'name': 'user', 'password': '1'},
-    }
-
-    def __init__(self, user_id, name, password):
+    def __init__(self, user_id, login):
         self.id = user_id
-        self.name = name
-        self.password = password
+        self.login = login
 
-    @staticmethod
-    def get(name):
-        user = User.users.get(name)
-        if user:
-            return User(user_id=user['id'], name=user['name'], password=user['password'])
-        return None
+
+class MyDb:
+    def __init__(self, app):
+        self.app = app
+        self.app.teardown_appcontext(self.close_db)
+
+    def get_config(self):
+        return {
+            'user': self.app.config['MYSQL_USER'],
+            'password': self.app.config['MYSQL_PASSWORD'],
+            'host': self.app.config['MYSQL_HOST'],
+            'database': self.app.config['MYSQL_DATABASE']
+        }
+
+    def connect(self):
+        if 'db' not in g:
+            g.db = mysql.connector.connect(**self.get_config())
+        return g.db
+
+    def close_db(self, e=None):
+        db = g.pop('db', None)
+        if db is not None:
+            db.close()
