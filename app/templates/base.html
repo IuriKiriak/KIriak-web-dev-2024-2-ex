@@ -25,11 +25,11 @@
                             <a class="nav-link">{{ current_user.login }}</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('logout')}}">Выход</a>
+                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('auth.logout')}}">Выход</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'login'%}active{% endif%}" aria-current="page" href="{{url_for('login')}}">Вход</a>
+                          <a class="nav-link {%if request.endpoint == 'login'%}active{% endif%}" aria-current="page" href="{{url_for('auth.login')}}">Вход</a>
                         </li>
                         {% endif %}
                     </ul>
