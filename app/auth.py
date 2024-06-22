@@ -3,6 +3,7 @@ from flask_login import login_required, current_user, login_user, logout_user, L
 
 from app import app, db
 from .models import User
+from query import queries
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -51,6 +52,7 @@ def login():
                 return redirect(url_for('index'))
             else:
                 flash('Неверные логин или пароль', 'danger')
+
     return render_template('login.html', user=user_data)
 
 @bp.route('/logout')

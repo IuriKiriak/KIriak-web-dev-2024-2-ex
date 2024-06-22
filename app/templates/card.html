@@ -1,0 +1,43 @@
+{% macro BotCard(card) %}
+<div class="card w-75 parallax-perspective p-3 border-0">
+    <div class="parallax-card-wrap">
+        <div class="parallax-card">
+            <div class="parallax-card__content">
+                <div class="mb-3">
+                    <div class="row g-0">
+                        <div class="col">
+                            {% if card.FileImagePath %}
+                            <img src="https://logolook.net/wp-content/uploads/2021/06/Symbol-Minecraft.png"
+                                 class="img-thumbnail border-white image-box" alt="...">
+                            {% else %}
+                            <img class="img-thumbnail border-white image-box"
+                                src="https://img.icons8.com/ios-filled/50/no-image-gallery.png"
+                                alt="..." />
+                            {% endif %}
+                        </div>
+                        <div class="col d-flex flex-column">
+                            <div class="">
+                                <div class="d-flex">
+                                    <h1 class="card-title m-1 ms-0 "> {{ card.NameBot }} </h1>
+                                    {% if card.BotTypes %}
+                                        {% set types = card.BotTypes.split(',') %}
+                                        {% for type in types %}
+                                            <span class="badge bg-secondary bg-success m-1">{{ type }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="align-items-center">
+                                <p class="card-text">Бот для {{ card.NameForWhat }} </p>
+                            </div>
+                            <div class="mt-auto text-end p-3">
+                                <p class="card-text"><small class="text-muted">{{ card.ReleaseDate }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

@@ -14,4 +14,4 @@ init_login_manage(app)
 
 app.register_blueprint(bp_auth, url_prefix='/auth')
 
-from .views import *
+from .routes import *

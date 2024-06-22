@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Добро пожаловать на главную страницу!</h1>
+    <h1>Добро пожаловать на главную страницу!</h1>
+    <div class="row justify-content-center">
+        {% for card in cards %}
+            {% from 'card.html' import BotCard %}
+
+            {{ BotCard(card)}}
+        {% endfor %}
+    </div>
 {% endblock %}

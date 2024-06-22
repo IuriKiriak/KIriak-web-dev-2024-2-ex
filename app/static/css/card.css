@@ -1,0 +1,31 @@
+.parallax-card-wrap {
+  -webkit-perspective: 2000px;
+  perspective: 2000px;
+  -webkit-perspective-origin: center;
+  perspective-origin: center;
+  display: inline-block;
+}
+
+.parallax-card__content {
+  width: 100%;
+}
+
+.parallax-card {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 35px;
+  box-shadow: 0px 3px 20px rgba(0,0,0,0.25);
+  border-radius: 10px;
+  position: relative;
+  transition: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateX(0deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.image-box {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}
