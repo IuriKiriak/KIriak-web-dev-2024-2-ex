@@ -12,13 +12,24 @@ def index():
             query = queries["SELECT_BOT_INFO_FOR_CARD"]
             cursor.execute(query)
             cards = cursor.fetchall()
-            # for card in cards:
-            #     try:
-            #         type_card = card[2].split(", ")
-            #         card[2] = type_card
-            #     except:
-            #         card = None
+            print(cards)
     except:
+        db.connect().rollback()
         print("ошибка в полечении информации о всех ботах")
     return render_template('index.html', cards=cards)
+
+@app.route('/show_card/<int:card_id>')
+def show_card(card_id):
+    try:
+        with db.connect().cursor(named_tuple=True) as cursor:
+            query = queries["SELECT_BOT_INFO_FOR_SHOW"]
+            cursor.execute(query, (card_id,))
+            bot_info = cursor.fetchone()
+            print(bot_info)
+    except:
+        db.connect().rollback()
+        print("ошибка в полечении информации о Боте")
+    return render_template("show_card.html", bot=bot_info)
+
+
 

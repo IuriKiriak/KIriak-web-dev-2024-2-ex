@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+    {% block header_links %}
+
+    {% endblock %}
     <title>bot</title>
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-..."></script>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
@@ -37,6 +42,12 @@
     </header>
     <main>
         <div class="container">
+            {% block content %}
+                <p> пусто </p>
+            {% endblock %}
+        </div>
+        <alerts>
+            <div class="container">
             <div id="alert-container" class="alert-container">
                 {% if request.endpoint != 'login' %}
                     {% with msg = get_flashed_messages(with_categories=true) %}
@@ -51,25 +62,19 @@
                 {% endif %}
             </div>
         </div>
-
-
-        <div class="container">
-            {% block content %}
-                <p> пусто </p>
-            {% endblock %}
-        </div>
+        </alerts>
     </main>
     <footer>
     </footer>
-    <modal_windows>
-        {% block modal_windows %}
+    {% block modal_windows %}
+        <modal_windows>
 
-        {% endblock %}
-    </modal_windows>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-..."></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+        </modal_windows>
+    {% endblock %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/card.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block script_link %}
+
+    {% endblock %}
 </body>
 </html>

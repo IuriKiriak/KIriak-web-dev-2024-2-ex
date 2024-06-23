@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Добро пожаловать на страницу карточки</h1>
+    <div>
+        <p> {{ bot.NameBot }} </p>
+        <p>ShortDescription {{ bot.ShortDescription | safe }} </p>
+        <p>Description {{ bot.Description }} </p>
+        <p>Developer {{ bot.Developer }} </p>
+        <p>ReleaseDate {{ bot.ReleaseDate }} </p>
+        <p>AverageRating {{ bot.AverageRating }} </p>
+        <p>ReviewCount {{ bot.ReviewCount }} </p>
+        <p>FileImagePath {{ bot.FileImagePath }} </p>
+    </div>
+{% endblock %}

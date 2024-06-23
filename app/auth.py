@@ -20,12 +20,16 @@ def init_login_manage(app):
 
 
 def load_user(user_id):
-    with db.connect().cursor(named_tuple=True) as cursor:
-        query = 'SELECT * FROM Users WHERE UserID=%s'
-        cursor.execute(query, (user_id,))
-        user_data = cursor.fetchone()
-        if user_data:
-            return User(user_data.UserID, user_data.Login)
+    try:
+        with db.connect().cursor(named_tuple=True) as cursor:
+            query = 'SELECT * FROM Users WHERE UserID=%s'
+            cursor.execute(query, (user_id,))
+            user_data = cursor.fetchone()
+            if user_data:
+                return User(user_data.UserID, user_data.Login)
+    except:
+        db.connect().rollback()
+        print("ошибка при загрузки пользователя")
     return None
 
 
@@ -40,18 +44,21 @@ def login():
         user_data['login'] = login
         user_data['password'] = password
         user_data['remember'] = remember
-
-        with db.connect().cursor(named_tuple=True) as cursor:
-            query = 'SELECT * FROM Users WHERE Login=%s AND PasswordHash=SHA2(%s,256)'
-            cursor.execute(query, (login, password))
-            user_data = cursor.fetchone()
-            if user_data:
-                user = User(user_data.UserID, user_data.Login)
-                login_user(user, remember=remember)
-                flash('Вы успешно прошли аутентификацию', 'success')
-                return redirect(url_for('index'))
-            else:
-                flash('Неверные логин или пароль', 'danger')
+        try:
+            with db.connect().cursor(named_tuple=True) as cursor:
+                query = 'SELECT * FROM Users WHERE Login=%s AND PasswordHash=SHA2(%s,256)'
+                cursor.execute(query, (login, password))
+                user_data = cursor.fetchone()
+                if user_data:
+                    user = User(user_data.UserID, user_data.Login)
+                    login_user(user, remember=remember)
+                    flash('Вы успешно прошли аутентификацию', 'success')
+                    return redirect(url_for('index'))
+                else:
+                    flash('Неверные логин или пароль', 'danger')
+        except:
+            db.connect().rollback()
+            print("ошибка при авторизации")
 
     return render_template('login.html', user=user_data)
 

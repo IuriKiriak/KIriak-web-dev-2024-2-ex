@@ -4,11 +4,11 @@
         <div class="parallax-card">
             <div class="parallax-card__content">
                 <div class="mb-3">
-                    <div class="row g-0">
+                    <a  href="{{url_for('show_card', card_id = card.BotID )}}" class="text-dark" style="Text-decoration: none;" >
+                        <div class="row g-0">
                         <div class="col">
                             {% if card.FileImagePath %}
-                            <img src="https://logolook.net/wp-content/uploads/2021/06/Symbol-Minecraft.png"
-                                 class="img-thumbnail border-white image-box" alt="...">
+                            <img src="https://logolook.net/wp-content/uploads/2021/06/Symbol-Minecraft.png"                                 class="img-thumbnail border-white image-box" alt="...">
                             {% else %}
                             <img class="img-thumbnail border-white image-box"
                                 src="https://img.icons8.com/ios-filled/50/no-image-gallery.png"
@@ -35,6 +35,7 @@
                             </div>
                         </div>
                     </div>
+                    </a>
                 </div>
             </div>
         </div>

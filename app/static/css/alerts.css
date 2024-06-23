@@ -1,0 +1,46 @@
+main {
+    position: relative;
+}
+
+.alert-container {
+    position: absolute;
+    top: 60px;
+    transform: translate(-50%, -50%);
+    left: 50%;
+}
+
+.alert-container-login {
+    margin-top: 10px;
+}
+
+.toast-duration {
+    position: relative;
+    display: block;
+    float: none;
+    clear: both;
+    height: 3px;
+    width: 100%;
+    background-color: white; /* Цвет фона */
+}
+.toast-duration::after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; /* Изменение этого значения анимирует ширину полосы */
+    height: inherit;
+    background-color: black; /* Цвет полосы */
+    animation-name: toastDuration;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+}
+
+
+@keyframes toastDuration {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+
+

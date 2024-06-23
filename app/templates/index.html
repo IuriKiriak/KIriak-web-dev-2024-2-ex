@@ -1,12 +1,48 @@
 {% extends 'base.html' %}
 
+{% block header_links %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+{% endblock %}
+
 {% block content %}
     <h1>Добро пожаловать на главную страницу!</h1>
-    <div class="row justify-content-center">
         {% for card in cards %}
+        <div class="d-flex">
             {% from 'card.html' import BotCard %}
 
             {{ BotCard(card)}}
+            <div class="p-3 ">
+                    <button type="button" class="btn btn-danger" data-action={{url_for('admin.delete_bot', bot_id = card.BotID)}} data-bs-toggle="modal" data-bs-target="#deleteBot">Удалить</button>
+            </div>
+        </div>
         {% endfor %}
+{% endblock %}
+
+{{url_for('admin.delete_bot', bot_id = card.BotID)}}
+
+{% block modal_windows %}
+<div class="modal fade" id="deleteBot" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление записи</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Вы действительно хотите удалить бота <span class="name-bot"><span>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+          <form class="modal-form" method="post">
+            <button type="submit" class="btn btn-primary">Да</button>
+          </form>
+        </div>
+      </div>
     </div>
+</div>
+{% endblock %}
+
+{% block script_link %}
+    <script src="{{ url_for('static', filename='js/card.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/delete_bot.js') }}"></script>
 {% endblock %}
