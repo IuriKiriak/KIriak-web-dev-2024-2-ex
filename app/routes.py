@@ -10,7 +10,7 @@ def index():
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
             page = request.args.get('page', 1, type=int)
-            per_page = 5
+            per_page = 9
             offset = (page - 1) * per_page
             query = queries["SELECT_BOT_INFO_FOR_CARD"]
             cursor.execute(query, (per_page, offset))

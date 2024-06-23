@@ -1,44 +1,62 @@
 {% macro BotCard(card) %}
-<div class="card w-75 parallax-perspective p-3 border-0">
-    <div class="parallax-card-wrap">
-        <div class="parallax-card">
-            <div class="parallax-card__content">
-                <div class="mb-3">
-                    <a  href="{{url_for('show_card', card_id = card.BotID )}}" class="text-dark" style="Text-decoration: none;" >
-                        <div class="row g-0">
-                        <div class="col">
-                            {% if card.FileImagePath %}
-                            <img src="https://logolook.net/wp-content/uploads/2021/06/Symbol-Minecraft.png"                                 class="img-thumbnail border-white image-box" alt="...">
-                            {% else %}
-                            <img class="img-thumbnail border-white image-box"
-                                src="https://img.icons8.com/ios-filled/50/no-image-gallery.png"
-                                alt="..." />
-                            {% endif %}
+    <div class="flip">
+        <div class="front">
+            <div class="mdc-card bottom-card mdc-elevation--z4">
+                <div class="first-half">
+                    <div class="mdc-card__primary-action media-image top-card mdc-elevation--z8">
+                        <div class="mdc-card__media mdc-card__media--square">
+                            <div class="mdc-card__media-content">
+                                <img class="image-box" src="https://sun1-25.userapi.com/impg/Nsh6LClv4iO6uL7KBYiKuGIuuZm-yVrIeIhrAQ/Si37BnM4vhM.jpg?size=736x736&quality=96&sign=86d57af06fc6528a5736fec9b06ab2f2&type=album">
+                            </div>
                         </div>
-                        <div class="col d-flex flex-column">
-                            <div class="">
-                                <div class="d-flex">
-                                    <h1 class="card-title m-1 ms-0 "> {{ card.NameBot }} </h1>
+                    </div>
+                </div>
+                <div class="last-half">
+                    <div class="card-info">
+                        <div class="d-flex flex-column">
+                            <h2>{{ card.NameBot }}</h2>
+                            <div class="pb-3" style="min-height: 65px;">
                                     {% if card.BotTypes %}
                                         {% set types = card.BotTypes.split(',') %}
                                         {% for type in types %}
                                             <span class="badge bg-secondary bg-success m-1">{{ type }}</span>
                                         {% endfor %}
                                     {% endif %}
+                            </div>
+                            {% if card.AverageRating != None%}
+                                <div class="d-flex">
+                                    <h6><span class="yellow-star">&#9733;</span>{{ card.AverageRating}} &#183;</h6>
+                                    <h6 class="ps-1">{{ ReviewCount }} отзывов</h6>
                                 </div>
+                                <div class="d-flex flex-row-reverse">
+                                    <p>{{ card.ReleaseDate }}</h6>
+                                </div>
+                            {% else %}
+                            <div class="d-flex">
+                                <h6><span class="yellow-star">&#9733;</span>0 &#183;</h6>
+                                <h6 class="ps-1">отзывов пока нет</h6>
                             </div>
-                            <div class="align-items-center">
-                                <p class="card-text">Бот для {{ card.NameForWhat }} </p>
+                            <div class="d-flex flex-row-reverse">
+                                <p>{{ card.ReleaseDate }}</h6>
                             </div>
-                            <div class="mt-auto text-end p-3">
-                                <p class="card-text"><small class="text-muted">{{ card.ReleaseDate }}</small></p>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
-                    </a>
                 </div>
             </div>
         </div>
+        <div class="back">
+            <div class="mdc-card bottom-card mdc-elevation--z4">
+                <div class="first-half">
+                    <div class="d-flex">
+                        <a type="button" class="m-1 btn btn-secondary" href="{{url_for('show_card', card_id = card.BotID)}}">Просмотр</a>
+                        <a type="button" class="m-1 btn btn-primary" href="{{url_for('admin.edit_bot', bot_id = card.BotID)}}">Редактировать</a>
+                        <button type="button" class="m-1 btn btn-danger" data-action={{url_for('admin.delete_bot', bot_id = card.BotID)}} data-bs-toggle="modal" data-bs-target="#deleteBot">Удалить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
+
 {% endmacro %}

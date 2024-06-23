@@ -5,23 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Добро пожаловать на главную страницу!</h1>
-    <a class="btn btn-success" href="{{url_for('admin.create_bot')}}">создать бота</a>
-
-    {% for card in cards %}
-        <div class="d-flex">
-            {% from 'card.html' import BotCard %}
-
-            {{ BotCard(card)}}
-            <div class="p-3 ">
-                <button type="button" class="btn btn-danger" data-action={{url_for('admin.delete_bot', bot_id = card.BotID)}} data-bs-toggle="modal" data-bs-target="#deleteBot">Удалить</button>
-            </div>
-            <div class="p-3 ">
-                        <a class="btn btn-warning" href="{{url_for('admin.edit_bot', bot_id = card.BotID)}}">Редактировать</a>
-            </div>
-        </div>
-    {% endfor %}
-    <nav aria-label="Page navigation example">
+<div class="d-flex justify-content-between p-3">
+    <a class="btn btn-success" style="height: 100%;" href="{{url_for('admin.create_bot')}}">создать бота</a>
+    <nav aria-label="Page navigation example" class="text-end">
         <ul class="pagination">
             <li class="page-item {% if page == 1 %}disabled{% endif %}">
                 <a class="page-link" href="?page={{ page - 1 }}" aria-label="Previous">
@@ -40,7 +26,14 @@
             </li>
         </ul>
     </nav>
+</div>
+    <div class="container">
+        {% for card in cards %}
+                {% from 'card.html' import BotCard %}
 
+                {{ BotCard(card)}}
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block modal_windows %}

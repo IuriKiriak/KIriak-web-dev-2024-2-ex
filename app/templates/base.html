@@ -48,30 +48,26 @@
         </div>
         <alerts>
             <div class="container">
-            <div id="alert-container" class="alert-container">
-                {% if request.endpoint != 'login' %}
-                    {% with msg = get_flashed_messages(with_categories=true) %}
-                        {% for category, message in msg %}
-                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="toast-duration"></div> <!-- Элемент для отображения времени -->
-                                </div>
-                        {% endfor %}
-                    {% endwith %}
-                {% endif %}
+                <div id="alert-container" class="alert-container">
+                    {% if request.endpoint != 'login' %}
+                        {% with msg = get_flashed_messages(with_categories=true) %}
+                            {% for category, message in msg %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="toast-duration"></div> <!-- Элемент для отображения времени -->
+                                    </div>
+                            {% endfor %}
+                        {% endwith %}
+                    {% endif %}
+                </div>
             </div>
-        </div>
         </alerts>
     </main>
     <footer>
     </footer>
     {% block modal_windows %}
-        <modal_windows>
-
-        </modal_windows>
     {% endblock %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block script_link %}
 
