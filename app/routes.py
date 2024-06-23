@@ -9,14 +9,21 @@ from query import queries
 def index():
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
+            page = request.args.get('page', 1, type=int)
+            per_page = 5
+            offset = (page - 1) * per_page
             query = queries["SELECT_BOT_INFO_FOR_CARD"]
-            cursor.execute(query)
+            cursor.execute(query, (per_page, offset))
             cards = cursor.fetchall()
             print(cards)
+            # получение количества ботов для отображения определенного количества страниц
+            cursor.execute("SELECT COUNT(*) AS total FROM Bots")
+            total_records = cursor.fetchone().total
+            total_pages = (total_records + per_page - 1) // per_page
     except:
         db.connect().rollback()
         print("ошибка в полечении информации о всех ботах")
-    return render_template('index.html', cards=cards)
+    return render_template('index.html', cards=cards, page=page, total_pages=total_pages)
 
 @app.route('/show_card/<int:card_id>')
 def show_card(card_id):
