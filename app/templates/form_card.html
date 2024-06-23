@@ -1,0 +1,36 @@
+{% macro form(types, card) %}
+{% if request.endpoint == "admin.edit_bot" %}
+    <h1 class='mb-3'>редактирование бота</h1>
+{% elif request.endpoint == "admin.create_bot" %}
+    <h1 class='mb-3'>Создание бота</h1>
+{% endif %}
+<form method="POST">
+    <div>
+        <label for="InputName" class="form-label">Имя</label>
+        <input type="text" name='NameBot' class="form-control" id="InputName" value={{card.NameBot or ''}}>
+    </div>
+    <div>
+        <label for="InputName" class="form-label">Для чего этот бот ?</label>
+        <input type="text" name='NameForWhat' class="form-control" id="InputNameForWhat" value={{card.NameForWhat or ''}}>
+    </div>
+    <p>выберите тип (чтобы выбрать несколько зажмите ctrl)</p>
+    <select id="types" name="types" class="form-select" multiple aria-label="Multiple select example">
+        {% for type in types %}
+            <option name="{{ type.TypeName }}" value="{{ type.TypeName }}">{{ type.TypeName }}</option>
+        {% endfor %}
+    </select>
+    <div>
+        <label for="InputName" class="form-label">Краткое описание</label>
+        <input type="text" name='ShortDescription' class="form-control" id="InputShortDescription" value={{card.ShortDescription or ''}}>
+    </div>
+    <div>
+        <label for="InputName" class="form-label">Описание</label>
+        <input type="text" name='Description' class="form-control" id="InputDescription" value={{card.Description or ''}}>
+    </div>
+    <div>
+        <label for="InputName" class="form-label">Разработчик</label>
+        <input type="text" name='Developer' class="form-control" id="InputDeveloper" value={{card.Developer or ''}}>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+{% endmacro %}

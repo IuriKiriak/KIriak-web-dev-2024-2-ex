@@ -35,8 +35,7 @@ def show_card(card_id):
             print(bot_info)
     except:
         db.connect().rollback()
-        print("ошибка в полечении информации о Боте")
+        print("ошибка в получении информации о Боте")
     return render_template("show_card.html", bot=bot_info)
-
 
 

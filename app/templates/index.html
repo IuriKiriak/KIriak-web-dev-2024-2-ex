@@ -6,6 +6,8 @@
 
 {% block content %}
     <h1>Добро пожаловать на главную страницу!</h1>
+    <a class="btn btn-success" href="{{url_for('admin.create_bot')}}">создать бота</a>
+
     {% for card in cards %}
         <div class="d-flex">
             {% from 'card.html' import BotCard %}
@@ -13,6 +15,9 @@
             {{ BotCard(card)}}
             <div class="p-3 ">
                 <button type="button" class="btn btn-danger" data-action={{url_for('admin.delete_bot', bot_id = card.BotID)}} data-bs-toggle="modal" data-bs-target="#deleteBot">Удалить</button>
+            </div>
+            <div class="p-3 ">
+                        <a class="btn btn-warning" href="{{url_for('admin.edit_bot', bot_id = card.BotID)}}">Редактировать</a>
             </div>
         </div>
     {% endfor %}

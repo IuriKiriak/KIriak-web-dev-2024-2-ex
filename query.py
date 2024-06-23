@@ -46,5 +46,24 @@ queries = {
     """,
     "DELETE_BOT_IN_BOTS_TABLE": """
     DELETE FROM Bots WHERE BotID = %s
+    """,
+    "SELECT_TYPES": """
+        SELECT 
+            Type.TypeName
+        From Type;
+    """,
+    "INSERT_BOT": """
+    INSERT INTO Bots (NameBot, NameForWhat, Description, ShortDescription, Developer, UserID) 
+    VALUES (%s, %s, %s, %s, %s, %s);
+    """,
+    "INSERT_IN_BOTSTYPES": """
+        INSERT INTO BotsType (BotID, TypeID) VALUES (%s, %s)
+    """,
+    "SELECT_TYPEID": """
+        SELECT TypeID FROM Type WHERE TypeName = %s
+    """,
+    "UPDATE_Bot": """
+        UPDATE Bots SET NameBot=%s, NameForWhat=%s, Description=%s, ShortDescription=%s, Developer=%s where BotID=%s;
     """
+
 }
