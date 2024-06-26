@@ -5,8 +5,7 @@ queries = {
                 GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
                 Bots.BotID,
                 Bots.ReleaseDate,
-                Bots.ShortDescription,
-                AVG(Reviews.Rating) AS AverageRating,
+                ROUND(AVG(Reviews.Rating), 1) AS AverageRating,
                 COUNT(DISTINCT Reviews.ReviewID) AS ReviewCount,
                 Files.FileImagePath,
                 Files.FilePath
@@ -30,7 +29,7 @@ queries = {
             Bots.Developer,
             Bots.ReleaseDate,
             GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
-            AVG(Reviews.Rating) AS AverageRating,
+            ROUND(AVG(Reviews.Rating), 1) AS AverageRating,
             COUNT(DISTINCT Reviews.ReviewID) AS ReviewCount,
             Files.FileImagePath
         FROM
@@ -64,6 +63,21 @@ queries = {
     """,
     "UPDATE_Bot": """
         UPDATE Bots SET NameBot=%s, NameForWhat=%s, Description=%s, ShortDescription=%s, Developer=%s where BotID=%s;
+    """,
+    "SELECT_ALL_REVIEWS": """
+        SELECT
+        Reviews.BotID,
+        Reviews.Rating,
+        Reviews.TextReviews,
+        Reviews.PublicationDate,
+        Users.Login
+    FROM
+        Reviews
+    JOIN
+        Users ON Reviews.UserID = Users.UserID
+    WHERE
+        Reviews.BotID = %s
+    LIMIT %s OFFSET %s;
     """
 
 }

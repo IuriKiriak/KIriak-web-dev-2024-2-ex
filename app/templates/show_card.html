@@ -1,15 +1,136 @@
 {% extends 'base.html' %}
 
+{% block header_links %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <h1>Добро пожаловать на страницу карточки</h1>
-    <div>
-        <p> {{ bot.NameBot }} </p>
-        <p>ShortDescription {{ bot.ShortDescription | safe }} </p>
-        <p>Description {{ bot.Description }} </p>
-        <p>Developer {{ bot.Developer }} </p>
-        <p>ReleaseDate {{ bot.ReleaseDate }} </p>
-        <p>AverageRating {{ bot.AverageRating }} </p>
-        <p>ReviewCount {{ bot.ReviewCount }} </p>
-        <p>FileImagePath {{ bot.FileImagePath }} </p>
+<!-- описание бота -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="product-info">
+                <h2 class="text-decoration-underline">{{ bot.NameBot }}</h2>
+                <div class="ratings">
+                    {% if bot.AverageRating is not none %}
+                    <p>Средняя оценка: {{ bot.AverageRating }} &nbsp;&nbsp; Отзывов: {{ bot.ReviewCount }}</p>
+                    {% else %}
+                    <p>Отзывов пока нет, вы можете стать первым!</p>
+                    {% endif %}
+                </div>
+                {% if bot.ShortDescription != '' %}
+                <p class="description fw-bold">{{ bot.ShortDescription }}</p>
+                {% endif %}
+                {% if bot.Description != None %}
+                <div style="min-height: 300px;">
+                    <p class="description">Описание:</p>
+                    <p class="description">{{ bot.Description }}</p>
+                </div>
+                {% else %}
+                <div style="min-height: 200px;">
+                    <p class="description">Описания пока нет.</p>
+                </div>
+                {% endif %}
+                <p class="description text-muted text-end">{{ bot.ReleaseDate }}</p>
+            </div>
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="product-image-container">
+                <img src="https://sun1-25.userapi.com/impg/Nsh6LClv4iO6uL7KBYiKuGIuuZm-yVrIeIhrAQ/Si37BnM4vhM.jpg?size=736x736&quality=96&sign=86d57af06fc6528a5736fec9b06ab2f2&type=album"
+                    alt="{{ bot.NameBot }}">
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Форма для добавления отзыва -->
+<div class="container my-5">
+    <div class="row justify-content-end">
+        <div class="col-md-6">
+            <h2>Оставить свой отзыв</h2>
+            <form>
+                <div class="mb-3 stars">
+                    <input class="star star-5" id="star-5-2" type="radio" name="star" />
+                    <label class="star star-5" for="star-5-2"></label>
+                    <input class="star star-4" id="star-4-2" type="radio" name="star" />
+                    <label class="star star-4" for="star-4-2"></label>
+                    <input class="star star-3" id="star-3-2" type="radio" name="star" />
+                    <label class="star star-3" for="star-3-2"></label>
+                    <input class="star star-2" id="star-2-2" type="radio" name="star" />
+                    <label class="star star-2" for="star-2-2"></label>
+                    <input class="star star-1" id="star-1-2" type="radio" name="star" />
+                    <label class="star star-1" for="star-1-2"></label>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" style="height: 250px;" id="userReview" name="userReview" rows="3"
+                        required></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Таблица всх отзывов-->
+<div class="row justify-content-center">
+    <div class="col-md-8 ">
+        <h2>Отзывы</h2>
+        <div class="container mt-5">
+            {% for review in reviews %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.Login }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ review.PublicationDate }}</h6>
+                    {% if review.Rating == 5 %}
+                    <p class="card-text">⭐⭐⭐⭐⭐</p>
+                    {% elif review.Rating == 4 %}
+                    <p class="card-text">⭐⭐⭐⭐</p>
+                    {% elif review.Rating == 3 %}
+                    <p class="card-text">⭐⭐⭐</p>
+                    {% elif review.Rating == 2 %}
+                    <p class="card-text">⭐⭐</p>
+                    {% elif review.Rating == 1 %}
+                    <p class="card-text">⭐</p>
+                    {% endif %}
+                    <p class="card-text">"{{ review.TextReviews }}"</p>
+                </div>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+</div>
+
+<!-- Пагинация -->
+<div class="row justify-content-center pt-3 pb-3">
+    <div class="col-md-8 ">
+        <nav aria-label="Page navigation example" class="text-end">
+            <ul class="pagination justify-content-center">
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="?page={{ page - 1 }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% for num_page in range(1, total_pages + 1) %}
+                <li class="page-item {% if page == num_page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num_page }}">{{ num_page }}</a>
+                </li>
+                {% endfor %}
+                <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="?page={{ page + 1 }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 {% endblock %}

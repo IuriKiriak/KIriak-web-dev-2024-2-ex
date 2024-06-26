@@ -14,7 +14,7 @@
                 <div class="last-half">
                     <div class="card-info">
                         <div class="d-flex flex-column">
-                            <h2>{{ card.NameBot }}</h2>
+                            <h2 class="text-warning">{{ card.NameBot }}</h2>
                             <div class="pb-3" style="min-height: 65px;">
                                     {% if card.BotTypes %}
                                         {% set types = card.BotTypes.split(',') %}
@@ -26,7 +26,7 @@
                             {% if card.AverageRating != None%}
                                 <div class="d-flex">
                                     <h6><span class="yellow-star">&#9733;</span>{{ card.AverageRating}} &#183;</h6>
-                                    <h6 class="ps-1">{{ ReviewCount }} отзывов</h6>
+                                    <h6 class="ps-1">{{ card.ReviewCount }} отзывов</h6>
                                 </div>
                                 <div class="d-flex flex-row-reverse">
                                     <p>{{ card.ReleaseDate }}</h6>
@@ -34,7 +34,7 @@
                             {% else %}
                             <div class="d-flex">
                                 <h6><span class="yellow-star">&#9733;</span>0 &#183;</h6>
-                                <h6 class="ps-1">отзывов пока нет</h6>
+                                <h6 class="ps-1">отзывов нет</h6>
                             </div>
                             <div class="d-flex flex-row-reverse">
                                 <p>{{ card.ReleaseDate }}</h6>
