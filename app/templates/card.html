@@ -1,4 +1,4 @@
-{% macro BotCard(card) %}
+{% macro BotCard(card, current_user) %}
     <div class="flip">
         <div class="front">
             <div class="mdc-card bottom-card mdc-elevation--z4">
@@ -50,8 +50,12 @@
                 <div class="first-half">
                     <div class="d-flex">
                         <a type="button" class="m-1 btn btn-secondary" href="{{url_for('show_card', card_id = card.BotID)}}">Просмотр</a>
+                        {% if current_user.role_id == 1 or current_user.role_id == 2%}
                         <a type="button" class="m-1 btn btn-primary" href="{{url_for('admin.edit_bot', bot_id = card.BotID)}}">Редактировать</a>
+                        {% endif %}
+                        {% if current_user.role_id == 1 %}
                         <button type="button" class="m-1 btn btn-danger" data-action={{url_for('admin.delete_bot', bot_id = card.BotID)}} data-bs-toggle="modal" data-bs-target="#deleteBot">Удалить</button>
+                        {% endif %}
                     </div>
                 </div>
 

@@ -5,8 +5,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between p-3">
+<div class="d-flex {% if current_user.role_id == 1 %}justify-content-between{% else %}justify-content-end{% endif %} p-3">
+    {% if current_user.role_id == 1 %}
     <a class="btn btn-success" style="height: 100%;" href="{{url_for('admin.create_bot')}}">создать бота</a>
+    {% endif %}
     <nav aria-label="Page navigation example" class="text-end">
         <ul class="pagination">
             <li class="page-item {% if page == 1 %}disabled{% endif %}">
@@ -31,7 +33,7 @@
         {% for card in cards %}
                 {% from 'card.html' import BotCard %}
 
-                {{ BotCard(card)}}
+                {{ BotCard(card, current_user)}}
         {% endfor %}
     </div>
 {% endblock %}

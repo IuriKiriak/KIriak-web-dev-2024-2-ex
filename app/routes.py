@@ -26,6 +26,7 @@ def index():
         print("ошибка в полечении информации о всех ботах")
     return render_template('index.html', cards=cards, page=page, total_pages=total_pages)
 
+
 @app.route('/show_card/<int:card_id>')
 def show_card(card_id):
     try:

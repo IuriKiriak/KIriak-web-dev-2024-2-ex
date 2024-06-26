@@ -16,6 +16,9 @@ class User(UserMixin):
     def is_admin(self):
         return ADMIN_ROLE_ID == self.role_id
 
+    def is_moder(self):
+        return MODERATOR_ROLE_ID == self.role_id
+
     def can(self, action, record=None):
         check_rights = CheckRights(record)
         method = getattr(check_rights, action, None)
