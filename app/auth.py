@@ -1,11 +1,13 @@
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint
 from flask_login import login_required, current_user, login_user, logout_user, LoginManager
+from functools import wraps
 
 from app import app, db
 from .models import User
 from query import queries
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
+
 
 def init_login_manage(app):
     login_manager = LoginManager()
@@ -25,12 +27,30 @@ def load_user(user_id):
             query = 'SELECT * FROM Users WHERE UserID=%s'
             cursor.execute(query, (user_id,))
             user_data = cursor.fetchone()
+            print(user_data)
             if user_data:
-                return User(user_data.UserID, user_data.Login)
+                return User(user_data.UserID, user_data.Login, user_data.RoleID)
     except:
         db.connect().rollback()
         print("ошибка при загрузки пользователя")
     return None
+
+
+def checkRole(action):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            user_id = kwargs.get('user_id')
+            user = None
+            print(user_id)
+            if user_id:
+                user = load_user(user_id)
+            if current_user.can(action,record=user):
+                return f(*args, **kwargs)
+            flash("У вас нет доступа к этой странице", "danger")
+            return redirect(url_for("index"))
+        return wrapper
+    return decorator
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -50,7 +70,7 @@ def login():
                 cursor.execute(query, (login, password))
                 user_data = cursor.fetchone()
                 if user_data:
-                    user = User(user_data.UserID, user_data.Login)
+                    user = User(user_data.UserID, user_data.Login, user_data.RoleID)
                     login_user(user, remember=remember)
                     flash('Вы успешно прошли аутентификацию', 'success')
                     return redirect(url_for('index'))

@@ -3,13 +3,14 @@ from flask_login import current_user, login_required
 
 from app import app, db
 from query import queries
-
+from .auth import checkRole
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 
 @bp.route('/delete_bot/<int:bot_id>', methods=['GET', 'POST'])
 @login_required
+@checkRole("delete")
 def delete_bot(bot_id):
     print("вы зашли на сраницу удалить бота")
     try:
@@ -24,8 +25,10 @@ def delete_bot(bot_id):
 
     return redirect(url_for('index'))
 
+
 @bp.route('/create_bot', methods=['GET', 'POST'])
 @login_required
+@checkRole("create")
 def create_bot():
     card = {}
     types = []
@@ -82,6 +85,7 @@ def create_bot():
 
 @bp.route('/edit_bot/<bot_id>', methods=['GET', 'POST'])
 @login_required
+@checkRole("edit")
 def edit_bot(bot_id):
     card = {}
     types = []
