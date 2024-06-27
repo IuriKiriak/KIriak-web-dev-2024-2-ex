@@ -18,7 +18,7 @@
     <tr>
         <td>{{ review.NameBot }}</td>
         <td>{{ review.Rating }}</td>
-        <td>{{ review.TextReviews }}</td>
+        <td>{{ review.TextReviews | safe }}</td>
         <td>{{ review.StatusName }}</td>
     </tr>
       {% endfor %}

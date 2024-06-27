@@ -4,6 +4,7 @@ from flask_login import login_required, current_user, login_user, logout_user, l
 from app import app, db
 from .models import User
 from query import queries
+from .sanitaizer import sanitaizer_text
 
 PER_PAGE = 9
 PER_PAGE_REVIEWS = 1
@@ -77,6 +78,7 @@ def write_review(bot_id, user_id):
                 cursor.execute(query, (current_user.id, bot_id))
                 review_user = cursor.fetchone()
                 if not review_user:
+                    user_review = sanitaizer_text(user_review)
                     query = queries["INSERT_REVIEW_USER"]
                     print(bot_id, user_id, rating, user_review)
                     cursor.execute(query, (bot_id, user_id, rating, user_review))

@@ -7,7 +7,7 @@
     <p>логин {{ review.Login }}</p>
     <p>логин {{ review.Login }}</p>
     <p>оценка {{ review.Rating }}</p>
-    <p>текст отзыва {{ review.TextReviews }}</p>
+    <p>текст отзыва {{ review.TextReviews | safe}}</p>
     <p>отзыв на  {{ review.NameBot }}</p>
     <p>отзыв отправлен {{ review.PublicationDate }}</p>
 </div>

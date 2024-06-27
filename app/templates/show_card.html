@@ -101,7 +101,7 @@
                         {% elif review_user.Rating == 1 %}
                         <p class="card-text">⭐</p>
                         {% endif %}
-                        <p class="card-text">"{{ review_user.TextReviews }}"</p>
+                        <p class="card-text">{{ review_user.TextReviews | safe}}</p>
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@
                     {% elif review.Rating == 1 %}
                     <p class="card-text">⭐</p>
                     {% endif %}
-                    <p class="card-text">"{{ review.TextReviews }}"</p>
+                    <p class="card-text">{{ review.TextReviews | safe}}</p>
                 </div>
             </div>
             {% endfor%}

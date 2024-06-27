@@ -17,7 +17,7 @@
     <tr>
         <td>{{ review.NameBot }}</td>
         <td>{{ review.Rating }}</td>
-        <td>{{ review.TextReviews }}</td>
+        <td>{{ review.TextReviews | safe }}</td>
         <td>
             <a class="btn btn-primary" href="{{ url_for('admin.show_reviews', id_review=review.ReviewID) }}">модерировать</a>
         </td>
