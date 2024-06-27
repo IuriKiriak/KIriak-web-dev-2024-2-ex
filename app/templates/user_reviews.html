@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>Страница ваших отзывов</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Имя бота</th>
+      <th scope="col">Рейтинг</th>
+      <th scope="col">текст</th>
+        <th scope="col">статус отзыва</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in all_user_reviews %}
+    <tr>
+        <td>{{ review.NameBot }}</td>
+        <td>{{ review.Rating }}</td>
+        <td>{{ review.TextReviews }}</td>
+        <td>{{ review.StatusName }}</td>
+    </tr>
+      {% endfor %}
+      </tbody>
+</table>
+{% endblock %}

@@ -27,6 +27,16 @@
                         <li class="nav-item">
                             <a class="nav-link">{{ current_user.login }}</a>
                         </li>
+                        {% if current_user.role_id == 3 %}
+                        <li class="nav-item">
+                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('user.user_reviews')}}">Ваши отзывы</a>
+                        </li>
+                        {% endif %}
+                        {% if current_user.role_id == 1 or current_user.role_id == 2 %}
+                        <li class="nav-item">
+                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('admin.moderation_reviews')}}">модерация отзывов</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item">
                           <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('auth.logout')}}">Выход</a>
                         </li>

@@ -1,25 +1,26 @@
 queries = {
     'SELECT_BOT_INFO_FOR_CARD': """
-            SELECT
-                Bots.NameBot,
-                GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
-                Bots.BotID,
-                Bots.ReleaseDate,
-                ROUND(AVG(Reviews.Rating), 1) AS AverageRating,
-                COUNT(DISTINCT Reviews.ReviewID) AS ReviewCount,
-                Files.FileImagePath,
-                Files.FilePath
-            FROM
-                Bots
-            LEFT JOIN Files ON Bots.BotID = Files.FileID
-            LEFT JOIN Reviews ON Bots.BotID = Reviews.BotID
-            LEFT JOIN BotsType ON Bots.BotID = BotsType.BotID
-            LEFT JOIN Type ON BotsType.TypeID = Type.TypeID
-            GROUP BY
-                Bots.BotID
-            ORDER BY
-                Bots.ReleaseDate DESC
-            LIMIT %s OFFSET %s;
+        SELECT
+            Bots.NameBot,
+            GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
+            Bots.BotID,
+            Bots.ReleaseDate,
+            ROUND(AVG(CASE WHEN Reviews.StatusID = 2 THEN Reviews.Rating ELSE NULL END), 1) AS AverageRating,
+            COUNT(DISTINCT CASE WHEN Reviews.StatusID = 2 THEN Reviews.ReviewID ELSE NULL END) AS ReviewCount,
+            Files.FileImagePath,
+            Files.FilePath
+        FROM
+            Bots
+        LEFT JOIN Files ON Bots.BotID = Files.FileID
+        LEFT JOIN Reviews ON Bots.BotID = Reviews.BotID
+        LEFT JOIN BotsType ON Bots.BotID = BotsType.BotID
+        LEFT JOIN Type ON BotsType.TypeID = Type.TypeID
+        GROUP BY
+            Bots.BotID
+        ORDER BY
+            Bots.ReleaseDate DESC
+        LIMIT %s OFFSET %s;
+
     """,
 
     'SELECT_BOT_INFO_FOR_SHOW':"""
@@ -85,13 +86,15 @@ queries = {
     JOIN
         Users ON Reviews.UserID = Users.UserID
     WHERE
-        Reviews.BotID = %s
+        Reviews.BotID = %s and 
+        Reviews.StatusID = 2
     LIMIT %s OFFSET %s;
     """,
 
     "SELECT_USER_REVIEW": """
         SELECT
         Users.Login,
+        Reviews.StatusID,
         Reviews.ReviewID,
         Reviews.BotID,
         Reviews.UserID,
@@ -111,6 +114,88 @@ queries = {
     "INSERT_REVIEW_USER": """
         INSERT INTO Reviews(BotID, UserID, Rating, TextReviews)
         VALUES (%s, %s, %s, %s);
-    """
+    """,
+    "SELECT_ALL_USER_REVIEWS": """
+        SELECT
+            Users.Login,
+            Reviews.ReviewID,
+            Reviews.BotID,
+            Reviews.UserID,
+            Reviews.Rating,
+            Reviews.TextReviews,
+            Reviews.PublicationDate,
+            Reviews.StatusID,
+            ReviewStatus.StatusName,
+            Bots.NameBot,
+            Users.FirstName,
+            Users.LastName
+        FROM
+            Reviews
+        JOIN
+            Users ON Reviews.UserID = Users.UserID
+        JOIN
+            ReviewStatus ON Reviews.StatusID = ReviewStatus.StatusID
+        JOIN
+            Bots ON Reviews.BotID = Bots.BotID
+        WHERE
+            Users.UserID = %s;
+    """,
 
+    "SELECT_ALL_REVIEWS_FOR_MODERATOR": """
+    SELECT
+        Users.Login,
+        Reviews.ReviewID,
+        Reviews.BotID,
+        Reviews.UserID,
+        Reviews.Rating,
+        Reviews.TextReviews,
+        Reviews.PublicationDate,
+        Reviews.StatusID,
+        ReviewStatus.StatusName,
+        Bots.NameBot,
+        Users.FirstName,
+        Users.LastName
+    FROM
+        Reviews
+    JOIN
+        Users ON Reviews.UserID = Users.UserID
+    JOIN
+        ReviewStatus ON Reviews.StatusID = ReviewStatus.StatusID
+    JOIN
+        Bots ON Reviews.BotID = Bots.BotID
+    WHERE
+        Reviews.StatusID = 1;
+    """,
+
+    "SELECT_ALL_REVIEW_FOR_MODERATOR": """
+        SELECT
+            Users.Login,
+            Reviews.ReviewID,
+            Reviews.BotID,
+            Reviews.UserID,
+            Reviews.Rating,
+            Reviews.TextReviews,
+            Reviews.PublicationDate,
+            Reviews.StatusID,
+            ReviewStatus.StatusName,
+            Bots.NameBot,
+            Users.FirstName,
+            Users.LastName
+        FROM
+            Reviews
+        JOIN
+            Users ON Reviews.UserID = Users.UserID
+        JOIN
+            ReviewStatus ON Reviews.StatusID = ReviewStatus.StatusID
+        JOIN
+            Bots ON Reviews.BotID = Bots.BotID
+        WHERE
+            Reviews.ReviewID = %s;
+    """,
+
+    "UPDATE_STATUS": """
+        UPDATE Reviews
+        SET StatusID = %s
+        WHERE ReviewID = %s;
+    """
 }

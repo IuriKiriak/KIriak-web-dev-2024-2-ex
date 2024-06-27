@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>вы перешли на страницу отзыва</h1>
+
+<div>
+    <p>логин {{ review.Login }}</p>
+    <p>логин {{ review.Login }}</p>
+    <p>оценка {{ review.Rating }}</p>
+    <p>текст отзыва {{ review.TextReviews }}</p>
+    <p>отзыв на  {{ review.NameBot }}</p>
+    <p>отзыв отправлен {{ review.PublicationDate }}</p>
+</div>
+<div class="d-flex">
+    <form action="{{ url_for('admin.approval', id_review=review.ReviewID) }}" method="post">
+    <button type="submit" class="btn btn-primary m-3">одобрить</button>
+    </form>
+    <form action="{{ url_for('admin.reject', id_review=review.ReviewID) }}" method="post">
+        <button type="submit" class="btn btn-danger m-3">Отклонить</button>
+    </form>
+</div>
+
+
+{% endblock %}

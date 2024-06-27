@@ -51,7 +51,7 @@
 </div>
 
 <!-- Форма для добавления отзыва -->
-{% if not review_user %}
+{% if not review_user and current_user.is_authenticated == True %}
 <form method="POST" action="{{ url_for('write_review', bot_id=bot.BotID, user_id=current_user.id) }}">
 <div class="container my-5">
     <div class="row justify-content-end">
@@ -82,30 +82,30 @@
     </div>
 </div>
     </form>
-{% else %}
-<div class="row justify-content-end">
-    <div class="col-md-8 ">
-        <h1>Ваш отзыв</h1>
-        <div class="card mt-3">
-            <div class="card-body">
-                    <h5 class="card-title">{{ review_user.Login }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ review_user.PublicationDate }}</h6>
-                    {% if review_user.Rating == 5 %}
-                    <p class="card-text">⭐⭐⭐⭐⭐</p>
-                    {% elif review_user.Rating == 4 %}
-                    <p class="card-text">⭐⭐⭐⭐</p>
-                    {% elif review_user.Rating == 3 %}
-                    <p class="card-text">⭐⭐⭐</p>
-                    {% elif review_user.Rating == 2 %}
-                    <p class="card-text">⭐⭐</p>
-                    {% elif review_user.Rating == 1 %}
-                    <p class="card-text">⭐</p>
-                    {% endif %}
-                    <p class="card-text">"{{ review_user.TextReviews }}"</p>
+{% elif current_user.is_authenticated == True %}
+    <div class="row justify-content-end">
+        <div class="col-md-8 ">
+            <h1>Ваш отзыв {% if review_user.StatusID == 1 %}еще не еще расмотрен{% elif review_user.StatusID == 3%}отклонен{% endif %}</h1>
+            <div class="card mt-3">
+                <div class="card-body">
+                        <h5 class="card-title">{{ review_user.Login }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ review_user.PublicationDate }}</h6>
+                        {% if review_user.Rating == 5 %}
+                        <p class="card-text">⭐⭐⭐⭐⭐</p>
+                        {% elif review_user.Rating == 4 %}
+                        <p class="card-text">⭐⭐⭐⭐</p>
+                        {% elif review_user.Rating == 3 %}
+                        <p class="card-text">⭐⭐⭐</p>
+                        {% elif review_user.Rating == 2 %}
+                        <p class="card-text">⭐⭐</p>
+                        {% elif review_user.Rating == 1 %}
+                        <p class="card-text">⭐</p>
+                        {% endif %}
+                        <p class="card-text">"{{ review_user.TextReviews }}"</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endif %}
 
 {% if reviews %}

@@ -43,7 +43,7 @@ def show_card(card_id):
             cursor.execute(query, (card_id, PER_PAGE_REVIEWS, offset))
             reviews = cursor.fetchall()
 
-            cursor.execute("SELECT COUNT(*) AS total FROM Reviews WHERE Reviews.BotID = %s", (card_id, ))
+            cursor.execute("SELECT COUNT(*) AS total FROM Reviews WHERE Reviews.BotID = %s and Reviews.StatusID = 2;", (card_id, ))
             total_records = cursor.fetchone().total
 
             total_pages = (total_records + PER_PAGE_REVIEWS - 1) // PER_PAGE_REVIEWS

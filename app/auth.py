@@ -67,11 +67,18 @@ def login():
         try:
             with db.connect().cursor(named_tuple=True) as cursor:
                 query = 'SELECT * FROM Users WHERE Login=%s AND PasswordHash=SHA2(%s,256)'
+                print("я тут")
                 cursor.execute(query, (login, password))
+                print("я тут")
                 user_data = cursor.fetchone()
+                print("я тут")
+                print(user_data)
                 if user_data:
+                    print("вот данные", user_data)
                     user = User(user_data.UserID, user_data.Login, user_data.RoleID)
+                    print("я тут")
                     login_user(user, remember=remember)
+                    print("я тут")
                     flash('Вы успешно прошли аутентификацию', 'success')
                     return redirect(url_for('index'))
                 else:

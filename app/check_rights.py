@@ -19,5 +19,11 @@ class CheckRights:
     def delete(self):
         return current_user.is_admin()
 
+    def moderation(self):
+        if current_user.is_admin():
+            return current_user.is_admin()
+        elif current_user.is_moder():
+            return current_user.is_moder()
+
     def show(self):
         return True
