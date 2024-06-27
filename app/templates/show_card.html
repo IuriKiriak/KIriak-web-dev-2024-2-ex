@@ -51,22 +51,24 @@
 </div>
 
 <!-- Форма для добавления отзыва -->
+{% if not review_user %}
+<form method="POST" action="{{ url_for('write_review', bot_id=bot.BotID, user_id=current_user.id) }}">
 <div class="container my-5">
     <div class="row justify-content-end">
         <div class="col-md-6">
             <h2>Оставить свой отзыв</h2>
             <form>
                 <div class="mb-3 stars">
-                    <input class="star star-5" id="star-5-2" type="radio" name="star" />
-                    <label class="star star-5" for="star-5-2"></label>
-                    <input class="star star-4" id="star-4-2" type="radio" name="star" />
-                    <label class="star star-4" for="star-4-2"></label>
-                    <input class="star star-3" id="star-3-2" type="radio" name="star" />
-                    <label class="star star-3" for="star-3-2"></label>
-                    <input class="star star-2" id="star-2-2" type="radio" name="star" />
-                    <label class="star star-2" for="star-2-2"></label>
-                    <input class="star star-1" id="star-1-2" type="radio" name="star" />
-                    <label class="star star-1" for="star-1-2"></label>
+                    <input class="star star-5" id="star-5" type="radio" name="5"/>
+                    <label class="star star-5" for="star-5"></label>
+                    <input class="star star-4" id="star-4" type="radio" name="4"/>
+                    <label class="star star-4" for="star-4"></label>
+                    <input class="star star-3" id="star-3" type="radio" name="3"/>
+                    <label class="star star-3" for="star-3"></label>
+                    <input class="star star-2" id="star-2" type="radio" name="2"/>
+                    <label class="star star-2" for="star-2"></label>
+                    <input class="star star-1" id="star-1" type="radio" name="1"/>
+                    <label class="star star-1" for="star-1"></label>
                 </div>
                 <div class="mb-3">
                     <textarea class="form-control" style="height: 250px;" id="userReview" name="userReview" rows="3"
@@ -79,6 +81,32 @@
         </div>
     </div>
 </div>
+    </form>
+{% else %}
+<div class="row justify-content-end">
+    <div class="col-md-8 ">
+        <h1>Ваш отзыв</h1>
+        <div class="card mt-3">
+            <div class="card-body">
+                    <h5 class="card-title">{{ review_user.Login }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ review_user.PublicationDate }}</h6>
+                    {% if review_user.Rating == 5 %}
+                    <p class="card-text">⭐⭐⭐⭐⭐</p>
+                    {% elif review_user.Rating == 4 %}
+                    <p class="card-text">⭐⭐⭐⭐</p>
+                    {% elif review_user.Rating == 3 %}
+                    <p class="card-text">⭐⭐⭐</p>
+                    {% elif review_user.Rating == 2 %}
+                    <p class="card-text">⭐⭐</p>
+                    {% elif review_user.Rating == 1 %}
+                    <p class="card-text">⭐</p>
+                    {% endif %}
+                    <p class="card-text">"{{ review_user.TextReviews }}"</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% if reviews %}
 <!-- Таблица всх отзывов-->

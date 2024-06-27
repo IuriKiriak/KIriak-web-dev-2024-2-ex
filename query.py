@@ -21,8 +21,10 @@ queries = {
                 Bots.ReleaseDate DESC
             LIMIT %s OFFSET %s;
     """,
+
     'SELECT_BOT_INFO_FOR_SHOW':"""
         SELECT 
+            Bots.BotID,
             Bots.NameBot,
             Bots.ShortDescription,
             Bots.Description,
@@ -43,27 +45,34 @@ queries = {
         GROUP BY
             Bots.BotID, Files.FileImagePath;
     """,
+
     "DELETE_BOT_IN_BOTS_TABLE": """
     DELETE FROM Bots WHERE BotID = %s
     """,
+
     "SELECT_TYPES": """
         SELECT 
             Type.TypeName
         From Type;
     """,
+
     "INSERT_BOT": """
     INSERT INTO Bots (NameBot, NameForWhat, Description, ShortDescription, Developer, UserID) 
     VALUES (%s, %s, %s, %s, %s, %s);
     """,
+
     "INSERT_IN_BOTSTYPES": """
         INSERT INTO BotsType (BotID, TypeID) VALUES (%s, %s)
     """,
+
     "SELECT_TYPEID": """
         SELECT TypeID FROM Type WHERE TypeName = %s
     """,
+
     "UPDATE_Bot": """
         UPDATE Bots SET NameBot=%s, NameForWhat=%s, Description=%s, ShortDescription=%s, Developer=%s where BotID=%s;
     """,
+
     "SELECT_ALL_REVIEWS": """
         SELECT
         Reviews.BotID,
@@ -78,6 +87,30 @@ queries = {
     WHERE
         Reviews.BotID = %s
     LIMIT %s OFFSET %s;
+    """,
+
+    "SELECT_USER_REVIEW": """
+        SELECT
+        Users.Login,
+        Reviews.ReviewID,
+        Reviews.BotID,
+        Reviews.UserID,
+        Reviews.Rating,
+        Reviews.TextReviews,
+        Reviews.PublicationDate,
+        Users.FirstName,
+        Users.LastName
+    FROM
+        Reviews
+    JOIN
+        Users ON Reviews.UserID = Users.UserID
+    WHERE
+        Users.UserID = %s AND
+        Reviews.BotID = %s;
+    """,
+    "INSERT_REVIEW_USER": """
+        INSERT INTO Reviews(BotID, UserID, Rating, TextReviews)
+        VALUES (%s, %s, %s, %s);
     """
 
 }

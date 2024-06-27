@@ -47,7 +47,7 @@ def checkRole(action):
                 user = load_user(user_id)
             if current_user.can(action,record=user):
                 return f(*args, **kwargs)
-            flash("У вас нет доступа к этой странице", "danger")
+            flash("У вас недостаточно прав для выполнения данного действия", "danger")
             return redirect(url_for("index"))
         return wrapper
     return decorator
