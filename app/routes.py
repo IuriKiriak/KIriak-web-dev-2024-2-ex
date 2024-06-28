@@ -15,7 +15,7 @@ def uploaded_file(file_image_id):
     filename = file_image_id
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
-            cursor.execute("SELECT ImageFiles.FileName FROM ImageFiles WHERE FileID = %s", (file_image_id, ))
+            cursor.execute(queries["SELECT_FILENAME"], (file_image_id, ))
             data = cursor.fetchone()
             expansion = data.FileName.split('.')[1]
             filename = filename + '.' + expansion
@@ -30,7 +30,7 @@ def index():
             page = request.args.get('page', 1, type=int)
             offset = (page - 1) * PER_PAGE
             print("sad")
-            query = queries["SELECT_BOT_INFO_FOR_CARD"]
+            query = queries["SELECT_ALL_BOT_INFO_FOR_CARD"]
             print("sad")
             cursor.execute(query, (PER_PAGE, offset))
             cards = cursor.fetchall()

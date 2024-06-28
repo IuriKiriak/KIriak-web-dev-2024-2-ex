@@ -43,8 +43,11 @@
         </div>
         <div class="col-md-6 d-flex align-items-center justify-content-center">
             <div class="product-image-container">
-                <img src="https://sun1-25.userapi.com/impg/Nsh6LClv4iO6uL7KBYiKuGIuuZm-yVrIeIhrAQ/Si37BnM4vhM.jpg?size=736x736&quality=96&sign=86d57af06fc6528a5736fec9b06ab2f2&type=album"
-                    alt="{{ bot.NameBot }}">
+                {% if bot.FileImageID == None %}
+                <img class="image-box" src="https://sun1-25.userapi.com/impg/Nsh6LClv4iO6uL7KBYiKuGIuuZm-yVrIeIhrAQ/Si37BnM4vhM.jpg?size=736x736&quality=96&sign=86d57af06fc6528a5736fec9b06ab2f2&type=album">
+                {% else %}
+                <img class="image-box" src="{{ url_for('uploaded_file', file_image_id=bot.FileImageID ) }}" alt="{{ bot.NameBot }}">
+                {% endif %}
             </div>
         </div>
     </div>

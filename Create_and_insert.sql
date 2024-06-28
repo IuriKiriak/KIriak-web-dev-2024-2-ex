@@ -45,7 +45,7 @@ CREATE TABLE Bots (
     Developer VARCHAR(50) DEFAULT NULL,
     UserID INT NOT NULL,
     UNIQUE (NameBot),
-    FOREIGN KEY (FileImageID) REFERENCES ImageFiles(FileID)
+    FOREIGN KEY (FileImageID) REFERENCES ImageFiles(FileID) ON DELETE CASCADE
 );
 
 
@@ -287,3 +287,5 @@ VALUES ('generated-uuid', 'MyBot', 'This is a description', 'Short desc', 'Utili
         INSERT INTO ImageFiles (FileID, FileName, MIMEType, MD5Hash) 
         VALUES ("6e4aebf1-9a64-4fd4-a0df-b3ccc4286f46", "1SfRHi6mSIk.jpg", "image/jpeg", "20996d83cdf6a9d9b1bbabd28f13ea9b");
 
+
+DEL

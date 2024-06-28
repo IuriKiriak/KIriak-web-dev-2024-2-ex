@@ -17,11 +17,30 @@ bp = Blueprint('admin', __name__, url_prefix='/admin')
 @login_required
 @checkRole("delete")
 def delete_bot(bot_id):
-    print("вы зашли на сраницу удалить бота")
+    print(f"вы зашли на сраницу удалить бота {bot_id}")
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
+            cursor.execute("SELECT FileImageID FROM Bots WHERE BotID = %s", (bot_id,))
+            file_id = cursor.fetchone()[0]
+
+            cursor.execute(queries["SELECT_FILENAME"], (file_id, ))
+            data = cursor.fetchone()
+
+            expansion = data.FileName.split('.')[1]
+            try:
+                file_path = file_id + '.' + expansion
+                print(file_path)
+                file_path = app.config['UPLOAD_FOLDER'] + '\\' + file_path
+                print(file_path)
+                if os.path.exists(file_path):
+                    # Удаляем файл
+                    os.remove(file_path)
+            except:
+                print("такого файла не существует")
+
             query = queries["DELETE_BOT_IN_BOTS_TABLE"]
-            cursor.execute(query, (bot_id,))
+            cursor.execute(query, (file_id,))
+
             db.connect().commit()
             flash('Удаление успешно', 'success')
     except:

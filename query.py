@@ -1,5 +1,5 @@
 queries = {
-    'SELECT_BOT_INFO_FOR_CARD': """
+    'SELECT_ALL_BOT_INFO_FOR_CARD': """
         SELECT
             Bots.NameBot,
             GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
@@ -19,11 +19,14 @@ queries = {
             Bots.NameBot,
             Bots.BotID,
             ImageFiles.FileID
+        ORDER BY
+            ReleaseDate DESC
         LIMIT %s OFFSET %s;
     """,
 
     'SELECT_BOT_INFO_FOR_SHOW':"""
         SELECT 
+            Bots.FileImageID,
             Bots.BotID,
             Bots.NameBot,
             Bots.ShortDescription,
@@ -45,7 +48,8 @@ queries = {
     """,
 
     "DELETE_BOT_IN_BOTS_TABLE": """
-    DELETE FROM Bots WHERE BotID = %s
+        DELETE FROM ImageFiles
+        WHERE FileID = %s;
     """,
 
     "SELECT_TYPES": """
@@ -199,5 +203,9 @@ queries = {
     "INSERT_FILE": """
         INSERT INTO ImageFiles (FileID, FileName, MIMEType, MD5Hash) 
         VALUES (%s, %s, %s, %s);
+    """,
+
+    "SELECT_FILENAME": """
+        SELECT ImageFiles.FileName FROM ImageFiles WHERE FileID = %s
     """
 }
