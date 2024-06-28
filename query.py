@@ -7,20 +7,17 @@ queries = {
             Bots.ReleaseDate,
             ROUND(AVG(CASE WHEN Reviews.StatusID = 2 THEN Reviews.Rating ELSE NULL END), 1) AS AverageRating,
             COUNT(DISTINCT CASE WHEN Reviews.StatusID = 2 THEN Reviews.ReviewID ELSE NULL END) AS ReviewCount,
-            Files.FileImagePath,
-            Files.FilePath
+            GROUP_CONCAT(DISTINCT ImageFiles.FileName SEPARATOR ', ') AS ImageFilePath
         FROM
             Bots
-        LEFT JOIN Files ON Bots.BotID = Files.FileID
         LEFT JOIN Reviews ON Bots.BotID = Reviews.BotID
         LEFT JOIN BotsType ON Bots.BotID = BotsType.BotID
         LEFT JOIN Type ON BotsType.TypeID = Type.TypeID
+        LEFT JOIN BotFiles ON Bots.BotID = BotFiles.BotID
+        LEFT JOIN ImageFiles ON BotFiles.ImageFileID = ImageFiles.FileID
         GROUP BY
-            Bots.BotID
-        ORDER BY
-            Bots.ReleaseDate DESC
+            Bots.BotID, Bots.NameBot, Bots.ReleaseDate
         LIMIT %s OFFSET %s;
-
     """,
 
     'SELECT_BOT_INFO_FOR_SHOW':"""
@@ -33,18 +30,16 @@ queries = {
             Bots.ReleaseDate,
             GROUP_CONCAT(DISTINCT Type.TypeName SEPARATOR ', ') AS BotTypes,
             ROUND(AVG(Reviews.Rating), 1) AS AverageRating,
-            COUNT(DISTINCT Reviews.ReviewID) AS ReviewCount,
-            Files.FileImagePath
+            COUNT(DISTINCT Reviews.ReviewID) AS ReviewCount
         FROM
             Bots
-        LEFT JOIN Files ON Bots.BotID = Files.FileID
         LEFT JOIN Reviews ON Bots.BotID = Reviews.BotID
         LEFT JOIN BotsType ON Bots.BotID = BotsType.BotID
         LEFT JOIN Type ON BotsType.TypeID = Type.TypeID
         WHERE
-            Bots.BotID = %s -- подставляется id бота
+            Bots.BotID = %s
         GROUP BY
-            Bots.BotID, Files.FileImagePath;
+            Bots.BotID, Bots.ReleaseDate;
     """,
 
     "DELETE_BOT_IN_BOTS_TABLE": """
@@ -197,5 +192,15 @@ queries = {
         UPDATE Reviews
         SET StatusID = %s
         WHERE ReviewID = %s;
+    """,
+
+    "INSERT_FILE": """
+        INSERT INTO ImageFiles (FileName, FilePath, MIMEType, MD5Hash)
+        VALUES (%s, %s, %s, %s);
+    """,
+
+    "INSERT_BOTFILE": """
+        INSERT INTO BotFiles (BotID, ImageFileID)
+        VALUES (%s, %s);
     """
 }

@@ -26,12 +26,12 @@
                     {% endif %}
                 </div>
                 {% if bot.ShortDescription != '' %}
-                <p class="description fw-bold">{{ bot.ShortDescription }}</p>
+                <p class="description fw-bold">{{ bot.ShortDescription | safe }}</p>
                 {% endif %}
                 {% if bot.Description != None %}
                 <div style="min-height: 300px;">
                     <p class="description">Описание:</p>
-                    <p class="description">{{ bot.Description }}</p>
+                    <p class="description">{{ bot.Description | safe }}</p>
                 </div>
                 {% else %}
                 <div style="min-height: 200px;">

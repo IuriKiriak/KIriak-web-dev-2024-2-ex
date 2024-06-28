@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, send_from_directory, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user, login_user, logout_user, login_manager
 
 from app import app, db
@@ -8,6 +8,11 @@ from .sanitaizer import sanitaizer_text
 
 PER_PAGE = 9
 PER_PAGE_REVIEWS = 1
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    print(filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/')
 def index():
