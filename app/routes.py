@@ -9,9 +9,18 @@ from .sanitaizer import sanitaizer_text
 PER_PAGE = 9
 PER_PAGE_REVIEWS = 1
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    print(filename)
+@app.route('/uploads/<file_image_id>')
+def uploaded_file(file_image_id):
+    print("беру картинку")
+    filename = file_image_id
+    try:
+        with db.connect().cursor(named_tuple=True) as cursor:
+            cursor.execute("SELECT ImageFiles.FileName FROM ImageFiles WHERE FileID = %s", (file_image_id, ))
+            data = cursor.fetchone()
+            expansion = data.FileName.split('.')[1]
+            filename = filename + '.' + expansion
+    except:
+        print("не удалось взять расширение файла")
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/')
@@ -20,7 +29,9 @@ def index():
         with db.connect().cursor(named_tuple=True) as cursor:
             page = request.args.get('page', 1, type=int)
             offset = (page - 1) * PER_PAGE
+            print("sad")
             query = queries["SELECT_BOT_INFO_FOR_CARD"]
+            print("sad")
             cursor.execute(query, (PER_PAGE, offset))
             cards = cursor.fetchall()
             print(cards)
@@ -40,7 +51,6 @@ def show_card(card_id):
         with db.connect().cursor(named_tuple=True) as cursor:
             page = request.args.get('page', 1, type=int)
             offset = (page - 1) * PER_PAGE_REVIEWS
-
             query = queries["SELECT_BOT_INFO_FOR_SHOW"]
             cursor.execute(query, (card_id, ))
             bot_info = cursor.fetchone()
@@ -63,6 +73,7 @@ def show_card(card_id):
         db.connect().rollback()
         print("ошибка в получении информации о Боте")
     return render_template("show_card.html", bot=bot_info, page=page, total_pages=total_pages, reviews=reviews, review_user=review_user)
+
 
 @app.route('/write_review/<int:bot_id>/<int:user_id>', methods=['GET', 'POST'])
 def write_review(bot_id, user_id):

@@ -24,20 +24,19 @@ CREATE TABLE Users(
     CreateAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
     );
-    
 		
+    
 CREATE TABLE ImageFiles (
-    FileID INT AUTO_INCREMENT PRIMARY KEY,
-    FileName VARCHAR(255) NOT NULL,
-    FilePath VARCHAR(255) NOT NULL,
-    MIMEType VARCHAR(50) NOT NULL,
-    MD5Hash VARCHAR(32) NOT NULL,
-    UNIQUE (FileID)
+		FileID VARCHAR(100) PRIMARY KEY,
+    FileName VARCHAR(100) NOT NULL,
+    MIMEType VARCHAR(100) NOT NULL,
+    MD5Hash VARCHAR(100) NOT NULL,
+    UNIQUE (FileName)
 );
-
 
 CREATE TABLE Bots (
     BotID INT AUTO_INCREMENT PRIMARY KEY,
+    FileImageID VARCHAR(100),
     NameBot VARCHAR(50) NOT NULL,
     Description TEXT DEFAULT NULL,
     ShortDescription VARCHAR(200) NOT NULL,
@@ -46,17 +45,7 @@ CREATE TABLE Bots (
     Developer VARCHAR(50) DEFAULT NULL,
     UserID INT NOT NULL,
     UNIQUE (NameBot),
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
-);
-
-
-CREATE TABLE BotFiles (
-    BotFileID INT AUTO_INCREMENT PRIMARY KEY,
-    BotID INT NOT NULL,
-    ImageFileID INT NOT NULL,
-    FOREIGN KEY (BotID) REFERENCES Bots(BotID) ON DELETE CASCADE,
-    FOREIGN KEY (ImageFileID) REFERENCES ImageFiles(FileID) ON DELETE CASCADE,
-    UNIQUE (BotID, ImageFileID)
+    FOREIGN KEY (FileImageID) REFERENCES ImageFiles(FileID)
 );
 
 
@@ -285,3 +274,16 @@ ORDER BY
     Bots.ReleaseDate
 DESC;
 */
+
+
+/*
+INSERT INTO ImageFiles (FileName, MIMEType, MD5Hash) 
+VALUES ('generated-uuid', 'image/png', 'd41d8cd98f00b204e9800998ecf8427e');
+
+INSERT INTO Bots (FileImage, NameBot, Description, ShortDescription, NameForWhat, Developer, UserID)
+VALUES ('generated-uuid', 'MyBot', 'This is a description', 'Short desc', 'Utility', 'DevName', 1);
+*/
+
+        INSERT INTO ImageFiles (FileID, FileName, MIMEType, MD5Hash) 
+        VALUES ("6e4aebf1-9a64-4fd4-a0df-b3ccc4286f46", "1SfRHi6mSIk.jpg", "image/jpeg", "20996d83cdf6a9d9b1bbabd28f13ea9b");
+

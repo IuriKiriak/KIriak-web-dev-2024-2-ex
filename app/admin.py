@@ -37,7 +37,7 @@ def delete_bot(bot_id):
 def create_bot():
     card = {}
     types = []
-
+    # ------------------------------------------------------
     try:
         with db.connect().cursor(named_tuple=True) as cursor:
             query = queries["SELECT_TYPES"]
@@ -45,8 +45,10 @@ def create_bot():
             types = cursor.fetchall()
     except:
         print("Не удалось получить все типы для ботов")
+    # ------------------------------------------------------
 
     if request.method == "POST":
+        # получение данных
         UserID = current_user.id
 
         types_form = request.form.getlist('types')
@@ -60,47 +62,65 @@ def create_bot():
         card["ShortDescription"] = ShortDescription
         card["Description"] = Description
         card["Developer"] = Developer
-
+        # -------------------------------------------------------------------------------
         try:
-            file = request.files['CoverImage']
-            md5_hash = hashlib.md5(file.read()).hexdigest()
-            file.seek(0)
-
-            # Вставка записи о боте в таблицу Bots
             with db.connect().cursor() as cursor:
+                # тут сгенерировать md5 хэш найти есть ли такой же уже в таблице,
+                # добавить новый если нет в таблице,
+                # указать FileName если уже такой есть в таблице
+                file = None
+                file_id = None
+                try:
+                    # взятить файл из формы ошибка если файла нет, потом переделать
+                    file = request.files['CoverImage']
+                    md5_hash = hashlib.md5(file.read()).hexdigest()
+                    file.seek(0)
+                    query = "SELECT FileID FROM ImageFiles WHERE MD5Hash = %s"
+                    cursor.execute(query, (md5_hash,))
+                    data = cursor.fetchone()
+                    print("data", data)
+                    # создать запись если такой нет
+                    if data == None:
+                        print("создаю название файла")
+                        file_name = secure_filename(file.filename)
+
+                        file_id = str(uuid4())
+                        expansion = file.filename.split('.')[1]
+
+                        print(f"filename :{file.filename}")
+                        print(f"expansion: {expansion}")
+
+                        new_file_name = (file_id + '.' + expansion)
+
+                        file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_file_name)
+                        file.save(file_path)
+
+                        mime_type = file.content_type
+                        # FileID, FileName, MIMEType, MD5Hash
+                        query = queries["INSERT_FILE"]
+                        cursor.execute(query, (file_id, file_name, mime_type, md5_hash))
+                        last_file_id = cursor.lastrowid
+                        print(f"запись в таблице создана:\nfile_id: {file_id}\nfile_name: {file_name}\nmime_type: {mime_type}\nmd5_hash: {md5_hash}\n" + "_" * 100)
+                    else:
+
+                        file_id = data[0]
+                        print(data)
+                except:
+                    print("фотография из формы не взята")
+
+                print("начало добавления бота")
+                print(f"file_id: {file_id}")
+                # добавление бота должно быть после добавление/взяти обложки
                 Description = sanitaizer_text(Description)
                 ShortDescription = sanitaizer_text(ShortDescription)
+                print(f"file_id: {file_id}, NameBot: {NameBot}, Description: {Description}, ShortDescription {ShortDescription}, NameForWhat {NameForWhat}, Developer {Developer}, UserID {UserID}")
+                # FileImage, NameBot, Description, ShortDescription, NameForWhat, Developer, UserID
                 query = queries["INSERT_BOT"]
-                cursor.execute(query, (NameBot, NameForWhat, Description, ShortDescription, Developer, UserID))
+                cursor.execute(query, (file_id, NameBot, Description, ShortDescription, NameForWhat, Developer, UserID))
                 print("lfflf ",cursor.lastrowid)
                 bot_id = cursor.lastrowid
 
-                #добавление пути к файлу и тд если нет такого же md5
-                print("мы тут")
-                query = "SELECT FileID FROM ImageFiles WHERE MD5Hash = %s"
-                print("запрос ")
-                cursor.execute(query, (md5_hash,))
-                data = cursor.fetchone()
-                print(data)
-                file_id = None
-                if data == None:
-                    print("начало")
-                    file_name = str(uuid4()) + '_' + secure_filename(file.filename)
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
-                    file.save(file_path)
-
-                    mime_type = file.content_type
-                    query = queries["INSERT_FILE"]
-                    cursor.execute(query, (file_name, file_path, mime_type, md5_hash))
-
-                    file_id = cursor.lastrowid
-                else:
-                    file_id = data[0]
-
-                print(bot_id, file_id)
-
-                query = queries["INSERT_BOTFILE"]
-                cursor.execute(query, (bot_id, file_id))
+                # ----------------------------------------------------------------------------------------------------------
 
                 print("_" * 100)
 

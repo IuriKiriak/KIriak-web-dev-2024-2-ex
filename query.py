@@ -7,16 +7,18 @@ queries = {
             Bots.ReleaseDate,
             ROUND(AVG(CASE WHEN Reviews.StatusID = 2 THEN Reviews.Rating ELSE NULL END), 1) AS AverageRating,
             COUNT(DISTINCT CASE WHEN Reviews.StatusID = 2 THEN Reviews.ReviewID ELSE NULL END) AS ReviewCount,
-            GROUP_CONCAT(DISTINCT ImageFiles.FileName SEPARATOR ', ') AS ImageFilePath
+            ImageFiles.FileID
         FROM
             Bots
         LEFT JOIN Reviews ON Bots.BotID = Reviews.BotID
         LEFT JOIN BotsType ON Bots.BotID = BotsType.BotID
         LEFT JOIN Type ON BotsType.TypeID = Type.TypeID
-        LEFT JOIN BotFiles ON Bots.BotID = BotFiles.BotID
-        LEFT JOIN ImageFiles ON BotFiles.ImageFileID = ImageFiles.FileID
+        LEFT JOIN ImageFiles ON Bots.FileImageID = ImageFiles.FileID
         GROUP BY
-            Bots.BotID, Bots.NameBot, Bots.ReleaseDate
+            Bots.ReleaseDate,
+            Bots.NameBot,
+            Bots.BotID,
+            ImageFiles.FileID
         LIMIT %s OFFSET %s;
     """,
 
@@ -53,8 +55,8 @@ queries = {
     """,
 
     "INSERT_BOT": """
-    INSERT INTO Bots (NameBot, NameForWhat, Description, ShortDescription, Developer, UserID) 
-    VALUES (%s, %s, %s, %s, %s, %s);
+    INSERT INTO Bots (FileImageID, NameBot, Description, ShortDescription, NameForWhat, Developer, UserID)
+    VALUES (%s, %s, %s, %s, %s, %s, %s);
     """,
 
     "INSERT_IN_BOTSTYPES": """
@@ -195,12 +197,7 @@ queries = {
     """,
 
     "INSERT_FILE": """
-        INSERT INTO ImageFiles (FileName, FilePath, MIMEType, MD5Hash)
+        INSERT INTO ImageFiles (FileID, FileName, MIMEType, MD5Hash) 
         VALUES (%s, %s, %s, %s);
-    """,
-
-    "INSERT_BOTFILE": """
-        INSERT INTO BotFiles (BotID, ImageFileID)
-        VALUES (%s, %s);
     """
 }
