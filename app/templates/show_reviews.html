@@ -1,24 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>вы перешли на страницу отзыва</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Логин: {{ review.Login }}</h5>
+                    <p class="card-text">Оценка: {{ review.Rating }}</p>
+                    <p class="card-text">Текст отзыва: {{ review.TextReviews | safe }}</p>
+                    <p class="card-text">Отзыв на: {{ review.NameBot }}</p>
+                    <p class="card-text">Отзыв отправлен: {{ review.PublicationDate }}</p>
 
-<div>
-    <p>логин {{ review.Login }}</p>
-    <p>логин {{ review.Login }}</p>
-    <p>оценка {{ review.Rating }}</p>
-    <p>текст отзыва {{ review.TextReviews | safe}}</p>
-    <p>отзыв на  {{ review.NameBot }}</p>
-    <p>отзыв отправлен {{ review.PublicationDate }}</p>
+                    <div class="d-flex mt-4">
+                        <form action="{{ url_for('admin.approval', id_review=review.ReviewID) }}" method="post">
+                            <button type="submit" class="btn btn-success">Одобрить</button>
+                        </form>
+                        <form action="{{ url_for('admin.reject', id_review=review.ReviewID) }}" method="post">
+                            <button type="submit" class="btn btn-danger ms-3">Отклонить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="d-flex">
-    <form action="{{ url_for('admin.approval', id_review=review.ReviewID) }}" method="post">
-    <button type="submit" class="btn btn-primary m-3">одобрить</button>
-    </form>
-    <form action="{{ url_for('admin.reject', id_review=review.ReviewID) }}" method="post">
-        <button type="submit" class="btn btn-danger m-3">Отклонить</button>
-    </form>
-</div>
-
-
 {% endblock %}

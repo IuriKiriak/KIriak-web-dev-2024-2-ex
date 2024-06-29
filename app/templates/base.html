@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
     {% block header_links %}
@@ -13,12 +15,15 @@
 </head>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-..."></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-..."></script>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="/">Bot</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon" id="navbarButton"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -29,20 +34,24 @@
                         </li>
                         {% if current_user.role_id == 3 %}
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('user.user_reviews')}}">Ваши отзывы</a>
+                            <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page"
+                                href="{{url_for('user.user_reviews')}}">Ваши отзывы</a>
                         </li>
                         {% endif %}
                         {% if current_user.role_id == 1 or current_user.role_id == 2 %}
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('admin.moderation_reviews')}}">модерация отзывов</a>
+                            <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page"
+                                href="{{url_for('admin.moderation_reviews')}}">модерация отзывов</a>
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page" href="{{url_for('auth.logout')}}">Выход</a>
+                            <a class="nav-link {%if request.endpoint == 'logout'%}active{% endif%}" aria-current="page"
+                                href="{{url_for('auth.logout')}}">Выход</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                          <a class="nav-link {%if request.endpoint == 'login'%}active{% endif%}" aria-current="page" href="{{url_for('auth.login')}}">Вход</a>
+                            <a class="nav-link {%if request.endpoint == 'login'%}active{% endif%}" aria-current="page"
+                                href="{{url_for('auth.login')}}">Вход</a>
                         </li>
                         {% endif %}
                     </ul>
@@ -53,34 +62,34 @@
     <main>
         <div class="container">
             {% block content %}
-                <p> пусто </p>
+            <p> пусто </p>
             {% endblock %}
         </div>
         <alerts>
             <div class="container">
                 <div id="alert-container" class="alert-container">
                     {% if request.endpoint != 'login' %}
-                        {% with msg = get_flashed_messages(with_categories=true) %}
-                            {% for category, message in msg %}
-                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="toast-duration"></div> <!-- Элемент для отображения времени -->
-                                    </div>
-                            {% endfor %}
-                        {% endwith %}
+                    {% with msg = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in msg %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="toast-duration"></div> <!-- Элемент для отображения времени -->
+                    </div>
+                    {% endfor %}
+                    {% endwith %}
                     {% endif %}
                 </div>
             </div>
         </alerts>
     </main>
     <footer class="bg-body-tertiary text-center text-lg-start fixed-bottom">
-      <!-- Copyright -->
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
 
-        <a class="text-body">©Кирияк Юрий Анатольевич группа 221-331</a>
-      </div>
-      <!-- Copyright -->
+            <a class="text-body">©Кирияк Юрий Анатольевич группа 221-331</a>
+        </div>
+        <!-- Copyright -->
     </footer>
     {% block modal_windows %}
     {% endblock %}
@@ -89,4 +98,5 @@
 
     {% endblock %}
 </body>
+
 </html>

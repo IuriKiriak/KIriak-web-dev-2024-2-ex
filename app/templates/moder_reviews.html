@@ -1,28 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Страница модерации пользователей</p>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Имя бота</th>
-      <th scope="col">Рейтинг</th>
-      <th scope="col">текст</th>
-        <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for review in reviews_moder %}
-    <tr>
-        <td>{{ review.NameBot }}</td>
-        <td>{{ review.Rating }}</td>
-        <td>{{ review.TextReviews | safe }}</td>
-        <td>
-            <a class="btn btn-primary" href="{{ url_for('admin.show_reviews', id_review=review.ReviewID) }}">модерировать</a>
-        </td>
-    </tr>
-      {% endfor %}
-      </tbody>
-</table>
+<div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">Не рассмотренные отзывы</h1>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Имя бота</th>
+                    <th scope="col">Рейтинг</th>
+                    <th scope="col" >Текст</th>
+                    <th scope="col" class="text-center">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews_moder %}
+                <tr>
+                    <td>{{ review.NameBot }}</td>
+                    <td>{{ review.Rating }}</td>
+                    <td>{{ review.TextReviews | safe }}</td>
+                    <td class="text-center">
+                        <a class="btn btn-primary btn-sm"
+                            href="{{ url_for('admin.show_reviews', id_review=review.ReviewID) }}">Модерировать</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+
 {% endblock %}

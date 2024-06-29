@@ -1,8 +1,45 @@
 {% extends 'base.html' %}
 
-{% block modal_windows %}
-    {% from 'modal_windows.html' import login_form %}
-
-    {{ login_form(user, errors)}}
-<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% block content %}
+<div class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">вход</h5>
+                </div>
+                <div class="card-body">
+                    {% if errors %}
+                    <div id="alert-container-login" class="alert-container-login">
+                        {% for error in errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('auth.login') }}">
+                        <div class="mb-3">
+                            <label for="InputLogin" class="form-label">Логин</label>
+                            <input type="text" name="login" class="form-control" id="InputLogin"
+                                value="{{ request.form.login or '' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="InputPassword" class="form-label">Пароль</label>
+                            <input type="password" name="password" class="form-control" id="InputPassword"
+                                value="{{ request.form.password or '' }}">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" name="remember" id="rememberMeCheck"
+                                {% if request.form.get('remember') %}checked{% endif %}>
+                            <label class="form-check-label" for="rememberMeCheck">Запомнить меня</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
